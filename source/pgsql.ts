@@ -1,4 +1,4 @@
-import { IPool } from '../database/iPool';
+import { IPool } from '@flexiblepersistence/dao';
 import { Pool } from 'pg';
 import { PersistenceInfo } from 'flexiblepersistence';
 
