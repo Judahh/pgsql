@@ -1,0 +1,59 @@
+{
+  "name": "@flexiblepersistence/pgsql",
+  "version": "0.1.0",
+  "description": "A implementation for Flexible Persistence DAO's PoolAdapter",
+  "main": "dist/source/index.js",
+  "keywords": [
+    "dao",
+    "flexiblepersistence",
+    "nodejs",
+    "typescript",
+    "javascript"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "postinstall": "",
+    "prepublish": "",
+    "build": "rm -rf dist/ && tsc",
+    "test": "jest --passWithNoTests --ci --verbose --forceExit --detectOpenHandles",
+    "integration": "jest -i -c integration.config.json --passWithNoTests  --ci --verbose --forceExit --detectOpenHandles",
+    "prestart": "",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Judahh/flexiblePersistence.git"
+  },
+  "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/Judahh/flexiblePersistence/issues"
+  },
+  "homepage": "https://github.com/Judahh/flexiblePersistence#readme",
+  "dependencies": {
+    "pg": "latest",
+    "flexiblepersistence": "latest"
+  },
+  "devDependencies": {
+    "@flexiblepersistence/dao": "latest",
+    "@flexiblepersistence/default-initializer": "latest",
+    "flexiblepersistence": "latest",
+    "@types/jest": "latest",
+    "@types/node": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-plugin-filenames": "latest",
+    "eslint-plugin-prettier": "latest",
+    "eslint-plugin-import": "latest",
+    "jest": "latest",
+    "prettier": "latest",
+    "reflect-metadata": "latest",
+    "ts-jest": "latest",
+    "typescript": "latest"
+  }
+}
