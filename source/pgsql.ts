@@ -44,11 +44,14 @@ export class PGSQL implements IPool {
       });
     }
   }
-  async generatePaginationPrefix(options?: {
-    page?: number | undefined;
-    pageSize?: number | undefined;
-    numberOfPages?: number | undefined;
-  }, idName?: string): Promise<unknown> {
+  async generatePaginationPrefix(
+    options?: {
+      page?: number | undefined;
+      pageSize?: number | undefined;
+      numberOfPages?: number | undefined;
+    },
+    idName?: string
+  ): Promise<unknown> {
     let query = '';
     if (this.validateOptions(options)) {
       query =
@@ -68,8 +71,8 @@ export class PGSQL implements IPool {
     if (this.validateOptions(options)) {
       query =
         `) as pagingElement) as newPagingElement WHERE ` +
-        `elementNumber BETWEEN((@PageNumber - 1) * @RowsPage + 1) ` +
-        `AND (@PageNumber * @RowsPage) `;
+        `elementNumber BETWEEN(@PageNumber * @RowsPage + 1) ` +
+        `AND ((@PageNumber + 1) * @RowsPage) `;
     }
     return query;
   }

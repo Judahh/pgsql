@@ -302,9 +302,9 @@
     strip-json-comments "^3.1.1"
 
 "@flexiblepersistence/dao@latest":
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/@flexiblepersistence/dao/-/dao-1.2.8.tgz#a7b1d089f9a45a818a94dc79dbaff4deecc79993"
-  integrity sha512-d/Qe7hV4Ni/ZPhnD29cgfWPbEHNZ2FtL2yNwPAwL0DzkBYcyiG+EUj4xV14SI0ss7pVxrUSJo9toTaJ0TnZS3A==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@flexiblepersistence/dao/-/dao-1.3.0.tgz#5d804d63e6e506fbdd3f347d88eab1e84337fcb0"
+  integrity sha512-WFV1nVneItxxH2qO1krY4MlCUu1Z6Q8jj6uIJW0MvooT0IdiqT6SrEd3VKkSTZ9IGH7YjR17tRr+r4foGQQqVg==
   dependencies:
     bignumber.js latest
     journaly latest
@@ -1278,9 +1278,9 @@ domexception@^2.0.1:
     webidl-conversions "^5.0.0"
 
 electron-to-chromium@^1.4.17:
-  version "1.4.29"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.29.tgz#a9b85ab888d0122124c9647c04d8dd246fae94b6"
-  integrity sha512-N2Jbwxo5Rum8G2YXeUxycs1sv4Qme/ry71HG73bv8BvZl+I/4JtRgK/En+ST/Wh/yF1fqvVCY4jZBgMxnhjtBA==
+  version "1.4.30"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.30.tgz#0f75a1dce26dffbd5a0f7212e5b87fe0b61cbc76"
+  integrity sha512-609z9sIMxDHg+TcR/VB3MXwH+uwtrYyeAwWc/orhnr90ixs6WVGSrt85CDLGUdNnLqCA7liv426V20EecjvflQ==
 
 emittery@^0.8.1:
   version "0.8.1"
@@ -1664,9 +1664,9 @@ flatted@^3.1.0:
   integrity sha512-8/sOawo8tJ4QOBX8YlQBMxL8+RLZfxMQOif9o0KUKTNTjMYElWPE0r/m5VNFxTRd0NSw8qSy8dajrwX4RYI1Hw==
 
 flexiblepersistence@latest:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/flexiblepersistence/-/flexiblepersistence-2.1.3.tgz#d9c4c0e4753fdc049baac02e7eaa39aa4427fdff"
-  integrity sha512-P8LCIlHImlUrTL6BlRW7hacllOqbUO00yi+QnWI+vkAeJKApZAksg5DFTFuEX0vO2a8gCUJYVKSZ33Z5vNQcQA==
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/flexiblepersistence/-/flexiblepersistence-2.2.1.tgz#4890496f40aa5441d0cf310283460f21bb58c866"
+  integrity sha512-l3l0WD7y0oDOUDQdbbgTO5LJsmqXaSDW6LnhSJ2Dv/WZwn8HdUR/2FhSdZwL7Sh/bDSXu0NZIGi4AsFFTWF2sA==
   dependencies:
     "@flexiblepersistence/default-initializer" latest
     journaly latest
@@ -2100,9 +2100,9 @@ istanbul-lib-source-maps@^4.0.0:
     source-map "^0.6.1"
 
 istanbul-reports@^3.0.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.1.2.tgz#b80e13cbab0120e1c367ebaa099862361aed5ead"
-  integrity sha512-0gHxuT1NNC0aEIL1zbJ+MTgPbbHhU77eJPuU35WKA7TgXiSNlCAx4PENoMrH0Or6M2H80TaZcWKhM0IK6V8gRw==
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.1.3.tgz#4bcae3103b94518117930d51283690960b50d3c2"
+  integrity sha512-x9LtDVtfm/t1GFiLl3NffC7hz+I1ragvgX1P/Lg1NlIagifZDKUkuuaAxH/qpwj2IuEfD8G2Bs/UKp+sZ/pKkg==
   dependencies:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
