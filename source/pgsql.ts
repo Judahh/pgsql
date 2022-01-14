@@ -15,34 +15,44 @@ export class PGSQL implements IPool {
   validateOptions(options?: {
     page?: number | undefined;
     pageSize?: number | undefined;
-    numberOfPages?: number | undefined;
+    pagesize?: number | undefined;
   }): boolean {
-    if (options?.pageSize) {
-      options.page = options.page || 1;
-      return !isNaN(options.page) && !isNaN(options.pageSize);
+    if (options) {
+      options.pageSize = options?.pageSize || options?.pagesize;
+      if (options.pageSize !== undefined && options.pageSize !== null) {
+        options.page =
+          options.page !== undefined && options.page !== null
+            ? parseInt(options.page.toString())
+            : 1;
+        options.pageSize = parseInt(options.pageSize.toString());
+        return (
+          !isNaN(options.page) && !isNaN(options.pageSize as unknown as number)
+        );
+      }
     }
     return false;
   }
-  async getNumberOfPages(
+  async getPages(
     script: string,
     options?: {
       page?: number | undefined;
       pageSize?: number | undefined;
       numberOfPages?: number | undefined;
-    },
-    // eslint-disable-next-line no-unused-vars
-    reject?: (error: Error) => unknown
-  ): Promise<void> {
-    if (this.validateOptions(options)) {
-      const query = 'SELECT COUNT(*) FROM ( ' + script + ' ) as numberOfPages';
-      await this.pool.query(query, (error, results) => {
-        if (error && reject) {
-          reject(new Error(error));
-        } else if (options) {
-          options.numberOfPages = results.rows[0];
-        }
-      });
+      numberofpages?: number | undefined;
+      pages?: number | undefined;
     }
+  ): Promise<number> {
+    if (options && this.validateOptions(options)) {
+      const query = 'SELECT COUNT(*) FROM ( ' + script + ' ) as numberOfPages';
+      const results = await this.pool.query(query);
+      if (options?.pageSize && results?.rows && results?.rows[0]) {
+        const rows = results.rows[0][''];
+        options.pages = Math.ceil(rows / options.pageSize);
+        options.numberOfPages = options.pages;
+        options.numberofpages = options.pages;
+      }
+    }
+    return options?.pages || 1;
   }
   async generatePaginationPrefix(
     options?: {
@@ -51,7 +61,7 @@ export class PGSQL implements IPool {
       numberOfPages?: number | undefined;
     },
     idName?: string
-  ): Promise<unknown> {
+  ): Promise<string> {
     let query = '';
     if (this.validateOptions(options)) {
       query =
@@ -66,7 +76,7 @@ export class PGSQL implements IPool {
     page?: number | undefined;
     pageSize?: number | undefined;
     numberOfPages?: number | undefined;
-  }): Promise<unknown> {
+  }): Promise<string> {
     let query = '';
     if (this.validateOptions(options)) {
       query =
@@ -79,18 +89,22 @@ export class PGSQL implements IPool {
   public getPersistenceInfo(): PersistenceInfo {
     return this.persistenceInfo;
   }
-  public connect(callback: unknown): Promise<unknown> {
-    return this.pool.connect(callback);
+  public connect(): Promise<boolean> {
+    return this.pool.connect();
   }
   public query(
     script: string,
-    values?: Array<unknown>,
-    callback?: () => unknown
-  ): Promise<unknown> {
+    values?: Array<unknown>
+  ): Promise<{
+    rows?: Array<unknown>;
+    rowCount?: number;
+    rowsAffected?: number[];
+    recordset?: any;
+  }> {
     // console.log('SCRIPT:', script, values, callback);
-    return this.pool.query(script, values, callback);
+    return this.pool.query(script, values);
   }
-  public end(callback?: () => unknown): Promise<any> {
-    return this.pool.end(callback);
+  public end(): Promise<any> {
+    return this.pool.end();
   }
 }
