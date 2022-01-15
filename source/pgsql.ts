@@ -1,6 +1,6 @@
 import { IPool } from '@flexiblepersistence/dao';
 import { Pool } from 'pg';
-import { PersistenceInfo } from 'flexiblepersistence';
+import { PersistenceInfo, IEventOptions } from 'flexiblepersistence';
 
 export class PGSQL implements IPool {
   protected pool: Pool;
@@ -12,11 +12,7 @@ export class PGSQL implements IPool {
     this.persistenceInfo = persistenceInfo;
     this.pool = new Pool(this.persistenceInfo);
   }
-  validateOptions(options?: {
-    page?: number | undefined;
-    pageSize?: number | undefined;
-    pagesize?: number | undefined;
-  }): boolean {
+  validateOptions(options?: IEventOptions): boolean {
     if (options) {
       options.pageSize = options?.pageSize || options?.pagesize;
       if (options.pageSize !== undefined && options.pageSize !== null) {
@@ -32,34 +28,19 @@ export class PGSQL implements IPool {
     }
     return false;
   }
-  async getPages(
-    script: string,
-    options?: {
-      page?: number | undefined;
-      pageSize?: number | undefined;
-      numberOfPages?: number | undefined;
-      numberofpages?: number | undefined;
-      pages?: number | undefined;
-    }
-  ): Promise<number> {
+  async getPages(script: string, options?: IEventOptions): Promise<number> {
     if (options && this.validateOptions(options)) {
-      const query = 'SELECT COUNT(*) FROM ( ' + script + ' ) as numberOfPages';
+      const query = 'SELECT COUNT(*) FROM ( ' + script + ' ) as pages';
       const results = await this.pool.query(query);
       if (options?.pageSize && results?.rows && results?.rows[0]) {
         const rows = results.rows[0][''];
-        options.pages = Math.ceil(rows / options.pageSize);
-        options.numberOfPages = options.pages;
-        options.numberofpages = options.pages;
+        options.pages = Math.ceil(rows / parseInt(options.pageSize.toString()));
       }
     }
-    return options?.pages || 1;
+    return parseInt((options?.pages || 1).toString());
   }
   async generatePaginationPrefix(
-    options?: {
-      page?: number | undefined;
-      pageSize?: number | undefined;
-      numberOfPages?: number | undefined;
-    },
+    options?: IEventOptions,
     idName?: string
   ): Promise<string> {
     let query = '';
@@ -72,11 +53,7 @@ export class PGSQL implements IPool {
     }
     return query;
   }
-  async generatePaginationSuffix(options?: {
-    page?: number | undefined;
-    pageSize?: number | undefined;
-    numberOfPages?: number | undefined;
-  }): Promise<string> {
+  async generatePaginationSuffix(options?: IEventOptions): Promise<string> {
     let query = '';
     if (this.validateOptions(options)) {
       query =
