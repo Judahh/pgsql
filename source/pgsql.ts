@@ -28,9 +28,26 @@ export class PGSQL implements IPool {
     }
     return false;
   }
-  async getPages(script: string, options?: IEventOptions): Promise<number> {
+  async getPages(
+    script: string,
+    options?: IEventOptions,
+    idName?: string
+  ): Promise<number> {
     if (options && this.validateOptions(options)) {
-      const query = 'SELECT COUNT(*) FROM ( ' + script + ' ) as pages';
+      const denseRank = idName
+        ? 'SELECT distinct DENSE_RANK() OVER(ORDER BY ' +
+          idName +
+          ') AS elementNumber,' +
+          idName +
+          ' FROM ('
+        : '';
+      const denseRankEnd = idName ? ' ) as pagingElement' : '';
+      const query =
+        'SELECT COUNT(*) FROM ( ' +
+        denseRank +
+        script +
+        denseRankEnd +
+        ' ) as pages';
       const results = await this.pool.query(query);
       if (options?.pageSize && results?.rows && results?.rows[0]) {
         const rows = results.rows[0][''];
