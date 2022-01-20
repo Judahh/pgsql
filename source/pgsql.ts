@@ -34,14 +34,20 @@ export class PGSQL implements IPool {
     idName?: string
   ): Promise<number> {
     if (options && this.validateOptions(options)) {
+      const denseRank = idName
+        ? 'SELECT distinct DENSE_RANK() OVER(ORDER BY ' +
+          idName +
+          ') AS elementNumber,' +
+          idName +
+          ' FROM ('
+        : '';
+      const denseRankEnd = idName ? ' ) as pagingElement' : '';
       const query =
-        'SELECT COUNT(*) FROM ( SELECT distinct DENSE_RANK() OVER(ORDER BY ' +
-        idName +
-        ') AS elementNumber,' +
-        idName +
-        ' FROM (' +
+        'SELECT COUNT(*) FROM ( ' +
+        denseRank +
         script +
-        ' ) as pages) as pagingElement';
+        denseRankEnd +
+        ' ) as pages';
       const results = await this.pool.query(query);
       if (options?.pageSize && results?.rows && results?.rows[0]) {
         const rows = results.rows[0][''];
