@@ -30,6 +30,7 @@ export class PGSQL implements IPool {
   }
   async getPages(
     script: string,
+    values?: Array<unknown>,
     options?: IEventOptions,
     idName?: string
   ): Promise<number> {
@@ -48,7 +49,7 @@ export class PGSQL implements IPool {
         script +
         denseRankEnd +
         ' ) as pages';
-      const results = await this.pool.query(query);
+      const results = await this.pool.query(query, values);
       if (options?.pageSize && results?.rows && results?.rows[0]) {
         const rows = results.rows[0][''];
         options.pages = Math.ceil(rows / parseInt(options.pageSize.toString()));
