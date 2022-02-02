@@ -43,9 +43,10 @@ export class PGSQL implements IPool {
       denseRank = idName
         ? 'SELECT ' + distinct + ' ' + denseRank + idName + ' FROM ('
         : '';
-      const elementNumber = options?.useRowNumber
-        ? 'ROW_NUMBER() OVER (ORDER BY ' + idName + ')'
-        : 'COUNT(*)';
+      const elementNumber =
+        options?.useRowNumber && idName !== undefined
+          ? 'ROW_NUMBER() OVER (ORDER BY ' + idName + ')'
+          : 'COUNT(*)';
 
       const denseRankEnd = idName ? ' ) as pagingElement' : '';
       const query =
