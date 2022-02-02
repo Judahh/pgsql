@@ -15,14 +15,15 @@ export class PGSQL implements IPool {
   validateOptions(options?: IEventOptions): boolean {
     if (options) {
       options.pageSize = options?.pageSize || options?.pagesize;
-      if (options.pageSize !== undefined && options.pageSize !== null) {
+      if (options?.pageSize !== undefined && options?.pageSize !== null) {
         options.page =
-          options.page !== undefined && options.page !== null
-            ? parseInt(options.page.toString())
+          options?.page !== undefined && options?.page !== null
+            ? parseInt(options?.page?.toString())
             : 1;
-        options.pageSize = parseInt(options.pageSize.toString());
+        options.pageSize = parseInt(options?.pageSize?.toString());
         return (
-          !isNaN(options.page) && !isNaN(options.pageSize as unknown as number)
+          !isNaN(options?.page) &&
+          !isNaN(options?.pageSize as unknown as number)
         );
       }
     }
@@ -35,14 +36,14 @@ export class PGSQL implements IPool {
     idName?: string
   ): Promise<number> {
     if (options && this.validateOptions(options)) {
-      let denseRank = !options.noDenseRank
+      let denseRank = !options?.noDenseRank
         ? 'DENSE_RANK() OVER(ORDER BY ' + idName + ') AS elementNumber,'
         : '';
-      const distinct = !options.noDistinct ? 'distinct ' : '';
+      const distinct = !options?.noDistinct ? 'distinct ' : '';
       denseRank = idName
         ? 'SELECT ' + distinct + ' ' + denseRank + idName + ' FROM ('
         : '';
-      const elementNumber = options.useRowNumber
+      const elementNumber = options?.useRowNumber
         ? 'ROW_NUMBER() OVER (ORDER BY ' + idName + ')'
         : 'COUNT(*)';
 
@@ -58,7 +59,9 @@ export class PGSQL implements IPool {
       const results = await this.pool.query(query, values);
       if (options?.pageSize && results?.rows && results?.rows[0]) {
         const rows = results.rows[0][''];
-        options.pages = Math.ceil(rows / parseInt(options.pageSize.toString()));
+        options.pages = Math.ceil(
+          rows / parseInt(options?.pageSize?.toString())
+        );
       }
     }
     return parseInt((options?.pages || 1).toString());
@@ -69,10 +72,10 @@ export class PGSQL implements IPool {
   ): Promise<string> {
     let query = '';
     if (this.validateOptions(options)) {
-      let denseRank = !options.noDenseRank
+      let denseRank = !options?.noDenseRank
         ? 'DENSE_RANK() OVER(ORDER BY ' + idName + ') AS elementNumber,'
         : '';
-      const distinct = !options.noDistinct ? 'distinct ' : '';
+      const distinct = !options?.noDistinct ? 'distinct ' : '';
       denseRank = idName
         ? 'SELECT ' + distinct + ' ' + denseRank + idName + ' FROM ('
         : '';
