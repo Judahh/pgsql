@@ -1,6 +1,6 @@
 {
   "name": "@flexiblepersistence/pgsql",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A implementation for Flexible Persistence DAO's PoolAdapter",
   "main": "dist/source/index.js",
   "keywords": [
