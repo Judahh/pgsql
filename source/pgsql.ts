@@ -36,26 +36,21 @@ export class PGSQL implements IPool {
     idName?: string
   ): Promise<number> {
     if (options && this.validateOptions(options)) {
-      let denseRank = !options?.noDenseRank
-        ? 'DENSE_RANK() OVER(ORDER BY ' + idName + ') AS elementNumber,'
-        : '';
-      const distinct = !options?.noDistinct ? 'distinct ' : '';
-      denseRank = idName
-        ? 'SELECT ' + distinct + ' ' + denseRank + idName + ' FROM ('
-        : '';
-      const elementNumber =
-        options?.useRowNumber && idName !== undefined
+      let elementNumber =
+        (!options?.noDenseRank && idName !== undefined
+          ? 'DENSE_RANK() OVER(ORDER BY ' + idName + ')'
+          : options?.useRowNumber && idName !== undefined
           ? 'ROW_NUMBER() OVER (ORDER BY ' + idName + ')'
-          : 'COUNT(*)';
-
-      const denseRankEnd = idName ? ' ) as pagingElement' : '';
+          : 'COUNT(*)') + ' AS elementNumber';
+      const distinct = !options?.noDistinct ? 'distinct ' : '';
+      const addParam = idName ? ',' + idName : '';
+      elementNumber = 'SELECT ' + distinct + ' ' + elementNumber + addParam;
       const query =
-        'SELECT ' +
+        'SELECT COUNT(*) FROM ( ' +
         elementNumber +
-        ' FROM ( ' +
-        denseRank +
+        ' FROM (' +
         script +
-        denseRankEnd +
+        ' ) as pagingElement' +
         ' ) as pages';
       const results = await this.pool.query(query, values);
       if (options?.pageSize && results?.rows && results?.rows[0]) {
@@ -73,18 +68,20 @@ export class PGSQL implements IPool {
   ): Promise<string> {
     let query = '';
     if (this.validateOptions(options)) {
-      let denseRank = !options?.noDenseRank
-        ? 'DENSE_RANK() OVER(ORDER BY ' + idName + ') AS elementNumber,'
-        : '';
+      let elementNumber =
+        (!options?.noDenseRank && idName !== undefined
+          ? 'DENSE_RANK() OVER(ORDER BY ' + idName + ')'
+          : options?.useRowNumber && idName !== undefined
+          ? 'ROW_NUMBER() OVER (ORDER BY ' + idName + ')'
+          : 'COUNT(*)') + ' AS elementNumber';
       const distinct = !options?.noDistinct ? 'distinct ' : '';
-      denseRank = idName
-        ? 'SELECT ' + distinct + ' ' + denseRank + idName + ' FROM ('
-        : '';
+      const addParam = ',*';
+      elementNumber = 'SELECT ' + distinct + ' ' + elementNumber + addParam;
       query =
         ` DECLARE @PageNumber AS INT, @RowsPage AS INT ` +
         `SET @PageNumber = ${options?.page} ` +
         `SET @RowsPage = ${options?.pageSize} ` +
-        `SELECT * FROM (SELECT ${denseRank} * FROM ( `;
+        `SELECT * FROM (${elementNumber} FROM ( `;
     }
     return query;
   }
