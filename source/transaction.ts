@@ -1,6 +1,7 @@
 import { IPool } from '@flexiblepersistence/dao';
+import { ITransaction } from 'flexiblepersistence';
 
-export class Transaction {
+export class Transaction implements ITransaction {
   protected pool: IPool;
 
   constructor(pool: IPool) {
