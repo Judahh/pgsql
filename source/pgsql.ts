@@ -1,6 +1,7 @@
 import { IPool } from '@flexiblepersistence/dao';
 import { Pool } from 'pg';
 import { PersistenceInfo, IEventOptions } from 'flexiblepersistence';
+import { Transaction } from './transaction';
 
 export class PGSQL implements IPool {
   protected pool: Pool;
@@ -112,6 +113,17 @@ export class PGSQL implements IPool {
   }> {
     // console.log('SCRIPT:', script, values, callback);
     return this.pool.query(script, values);
+  }
+  public async begin(options?): Promise<Transaction> {
+    const t = new Transaction(this.pool);
+    await t.begin(options);
+    return t;
+  }
+  public async commit(transaction: Transaction): Promise<void> {
+    await transaction.commit();
+  }
+  public async rollback(transaction: Transaction): Promise<void> {
+    await transaction.rollback();
   }
   public end(): Promise<any> {
     return this.pool.end();
