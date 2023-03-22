@@ -96,6 +96,14 @@ export class PGSQL implements IPool {
     }
     return query;
   }
+  async groupByPagination(
+    options?: IEventOptions,
+    idName?: string,
+    internalQuery?: string,
+    groupBy?: string
+  ): Promise<string> {
+    return groupBy || '';
+  }
   public getPersistenceInfo(): PersistenceInfo {
     return this.persistenceInfo;
   }
